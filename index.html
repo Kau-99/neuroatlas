@@ -63,18 +63,103 @@
             padding-left: 12px;
         }
 
+        /* BOOT SCREEN (cinematográfico) */
+        #boot-screen {
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(circle at center, #020617 0, #000 70%);
+            color: #e5e7eb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            pointer-events: auto;
+            font-family: 'JetBrains Mono', monospace;
+            transition: opacity 0.6s;
+        }
+        .boot-inner {
+            width: min(600px, 90vw);
+            background: rgba(2, 6, 23, 0.95);
+            border: 1px solid rgba(148, 163, 184, 0.4);
+            box-shadow: 0 0 40px rgba(0, 243, 255, 0.25);
+            padding: 24px 20px 18px;
+            position: relative;
+            overflow: hidden;
+        }
+        .boot-title {
+            font-size: 0.9rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--neon-cyan);
+            margin-bottom: 4px;
+        }
+        .boot-sub {
+            font-size: 0.8rem;
+            color: #94a3b8;
+            margin-bottom: 12px;
+        }
+        .boot-log {
+            font-size: 0.75rem;
+            line-height: 1.5;
+            max-height: 200px;
+            overflow-y: auto;
+            padding-right: 6px;
+            border-top: 1px solid rgba(51, 65, 85, 0.8);
+            border-bottom: 1px solid rgba(51, 65, 85, 0.8);
+            padding-top: 6px;
+            padding-bottom: 6px;
+        }
+        .boot-log div {
+            white-space: pre;
+        }
+        .boot-scan-line {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 120%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--neon-cyan), transparent);
+            opacity: 0.6;
+            animation: bootScan 2s linear infinite;
+        }
+        @keyframes bootScan {
+            0% { transform: translateX(-20%); }
+            100% { transform: translateX(20%); }
+        }
+        .boot-btn {
+            margin-top: 10px;
+            font-size: 0.8rem;
+            padding: 8px 18px;
+            border-radius: 999px;
+            border: 1px solid var(--neon-cyan);
+            background: transparent;
+            color: var(--neon-cyan);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+        }
+        .boot-btn:hover {
+            background: var(--neon-cyan);
+            color: #020617;
+            box-shadow: 0 0 20px rgba(0, 243, 255, 0.6);
+        }
+
         /* START OVERLAY (Necessário para Áudio) */
         #start-screen {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(2, 4, 8, 0.95);
             z-index: 9999;
-            display: flex;
+            display: none; /* começa escondido, só aparece após o boot */
             flex-direction: column;
             justify-content: center;
             align-items: center;
             pointer-events: auto;
             transition: opacity 0.8s;
+            opacity: 0;
         }
         .start-btn {
             padding: 15px 40px;
@@ -163,7 +248,14 @@
         .chem-label { display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 2px; font-family: 'Inter'; }
         .progress-bg { height: 4px; background: rgba(255,255,255,0.1); width: 100%; position: relative; }
         .progress-fill { height: 100%; width: 50%; background: var(--neon-cyan); transition: width 1.5s cubic-bezier(0.22, 1, 0.36, 1); position: relative; }
-        
+        #chem-chart {
+            width: 100%;
+            height: auto;
+            margin-top: 10px;
+            border-radius: 4px;
+            background: rgba(15,23,42,0.9);
+        }
+
         /* CONTROLES ESQUERDA */
         .sim-controls { position: absolute; top: 50%; left: 30px; transform: translateY(-50%); width: 200px; pointer-events: auto; display: flex; flex-direction: column; gap: 8px; }
         .sim-btn { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); color: #94a3b8; padding: 12px; font-family: 'JetBrains Mono'; font-size: 0.8rem; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 10px; }
@@ -186,13 +278,294 @@
         .behavior-list strong { color: var(--neon-cyan); }
         .mode-indicator { font-size: 0.7rem; text-transform: uppercase; margin-bottom: 10px; display: inline-block; padding: 2px 6px; border-radius: 2px; }
 
-        /* Mobile */
-        @media (max-width: 768px) {
-            .chem-monitor { top: auto; bottom: 20px; right: 20px; width: 160px; padding: 10px; font-size: 0.8rem; }
-            .sim-controls { top: auto; bottom: 150px; left: 20px; width: 160px; }
-            h1 { font-size: 1.5rem; }
-            #breathing-pacer { bottom: 50%; } /* Center breathing on mobile */
+        /* Sessões Guiadas */
+        .session-panel {
+            position: absolute;
+            bottom: 25px;
+            left: 30px;
+            width: 230px;
+            background: rgba(10, 16, 32, 0.95);
+            border: 1px solid rgba(148, 163, 184, 0.4);
+            border-radius: 8px;
+            padding: 10px 10px 8px;
+            pointer-events: auto;
+            backdrop-filter: blur(10px);
         }
+        .session-title {
+            font-family: 'JetBrains Mono';
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #94a3b8;
+            margin-bottom: 4px;
+        }
+        .session-select {
+            width: 100%;
+            background: rgba(15, 23, 42, 0.9);
+            border: 1px solid rgba(51, 65, 85, 0.9);
+            color: #e5e7eb;
+            font-family: 'JetBrains Mono';
+            font-size: 0.7rem;
+            padding: 4px 6px;
+            margin-bottom: 6px;
+        }
+        .session-buttons {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 4px;
+        }
+        .session-btn {
+            flex: 1;
+            border-radius: 999px;
+            border: 1px solid rgba(148, 163, 184, 0.6);
+            background: rgba(15, 23, 42, 0.9);
+            color: #e5e7eb;
+            font-family: 'JetBrains Mono';
+            font-size: 0.7rem;
+            padding: 3px 0;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            cursor: pointer;
+        }
+        .session-btn.stop {
+            border-color: rgba(248, 113, 113, 0.7);
+            color: #fecaca;
+        }
+        .session-btn:hover {
+            box-shadow: 0 0 12px rgba(148, 163, 184, 0.4);
+        }
+        .session-status {
+            font-size: 0.65rem;
+            color: #94a3b8;
+            min-height: 14px;
+        }
+
+        /* Grid / HUD extra (V2) */
+        .neuro-grid {
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(148, 163, 184, 0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(148, 163, 184, 0.04) 1px, transparent 1px);
+            background-size: 40px 40px;
+            mix-blend-mode: screen;
+            opacity: 0.5;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .hud-header::after {
+            content: "";
+            display: block;
+            margin-top: 8px;
+            width: 140px;
+            height: 2px;
+            background: linear-gradient(90deg, var(--neon-cyan), transparent);
+            animation: hudScan 3s infinite alternate;
+            opacity: 0.7;
+        }
+
+        @keyframes hudScan {
+            0% { transform: translateX(0); opacity: 0.4; }
+            100% { transform: translateX(40px); opacity: 1; }
+        }
+
+        .sim-btn.perf-toggle {
+            border-style: dashed;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            opacity: 0.8;
+        }
+
+        .sim-btn.perf-toggle.active {
+            border-color: var(--serotonin-green);
+            color: var(--serotonin-green);
+            box-shadow: 0 0 15px rgba(0, 255, 157, 0.25);
+            opacity: 1;
+        }
+
+        .neuro-footer {
+            position: absolute;
+            bottom: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            pointer-events: auto;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            color: #64748b;
+            background: rgba(2, 4, 8, 0.8);
+            padding: 8px 14px;
+            border-radius: 999px;
+            border: 1px solid rgba(148, 163, 184, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .neuro-footer span {
+            opacity: 0.8;
+        }
+
+        .neuro-footer button {
+            border: none;
+            background: transparent;
+            color: var(--neon-cyan);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            padding: 0 6px;
+            cursor: pointer;
+        }
+
+        .neuro-footer button:hover {
+            text-shadow: 0 0 10px var(--neon-cyan);
+        }
+
+        /* Modal científico extra */
+        #science-modal .modal-content {
+            border-top-color: var(--neon-purple);
+        }
+
+        #science-modal .science-section-title {
+            font-family: 'JetBrains Mono';
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--neon-cyan);
+            margin-bottom: 6px;
+        }
+
+        #science-modal .science-chip {
+            display: inline-block;
+            border-radius: 999px;
+            border: 1px solid rgba(148, 163, 184, 0.5);
+            padding: 3px 9px;
+            font-size: 0.7rem;
+            margin: 2px 3px;
+            color: #cbd5e1;
+        }
+
+        #science-modal .science-chip strong {
+            color: var(--neon-cyan);
+        }
+
+        #science-modal small {
+            color: #64748b;
+        }
+
+      /* Mobile / Tablets em pé */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 1.4rem;
+    }
+
+    .hud-header {
+        top: 12px;
+        left: 14px;
+    }
+
+    .audio-toggle {
+        top: 14px;
+        right: 14px;
+        font-size: 1.3rem;
+    }
+
+    /* Monitor químico sobe e encosta no topo direito */
+    .chem-monitor {
+        top: 60px;
+        right: 10px;
+        bottom: auto;
+        transform: none;
+        width: 52vw;
+        max-width: 260px;
+        padding: 10px;
+        font-size: 0.8rem;
+    }
+
+    /* Controles viram barra horizontal acima das sessões */
+    .sim-controls {
+        top: auto;
+        bottom: 150px;
+        left: 10px;
+        width: calc(100% - 20px);
+        transform: none;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        gap: 6px;
+        overflow-x: auto;
+        padding-bottom: 4px;
+    }
+
+    .sim-controls .sim-btn {
+        flex: 0 0 auto;
+        padding: 8px 10px;
+        font-size: 0.7rem;
+        white-space: nowrap;
+    }
+
+    /* Sessões guiadas viram um card full-width em cima do rodapé */
+    .session-panel {
+        bottom: 70px;
+        left: 10px;
+        width: calc(100% - 20px);
+    }
+
+    /* Rodapé centralizado, sem conflito com o painel */
+    .neuro-footer {
+        bottom: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        max-width: calc(100% - 20px);
+        padding: 6px 10px;
+        font-size: 0.65rem;
+        justify-content: center;
+        text-align: center;
+    }
+
+    /* Pacer de respiração fica mais central */
+    #breathing-pacer {
+        bottom: 50%;
+        transform: translate(-50%, 50%);
+    }
+}
+
+/* Telas MUITO pequenas (celular bem compacto) */
+@media (max-width: 480px) {
+    h1 {
+        font-size: 1.2rem;
+    }
+
+    .subtitle {
+        font-size: 0.75rem;
+        padding-left: 8px;
+    }
+
+    .chem-title {
+        font-size: 0.7rem;
+    }
+
+    .session-title {
+        font-size: 0.7rem;
+    }
+
+    .session-select {
+        font-size: 0.65rem;
+        padding: 3px 5px;
+    }
+
+    .session-btn {
+        font-size: 0.65rem;
+        padding: 2px 0;
+    }
+}
+
         
         #canvas-container { position: fixed; top:0; left:0; width: 100%; height: 100%; z-index: 1; }
     </style>
@@ -208,6 +581,19 @@
 </head>
 <body>
 
+    <!-- BOOT SCREEN -->
+    <div id="boot-screen">
+        <div class="boot-inner">
+            <div class="boot-scan-line"></div>
+            <div class="boot-title">NEURAL CORE v9.5</div>
+            <div class="boot-sub">Inicializando matriz sináptica e monitor neuroquímico...</div>
+            <div class="boot-log" id="boot-log"></div>
+            <button class="boot-btn" id="boot-btn" onclick="showStartScreen()" style="display:none;">
+                ENTRAR NO CÉREBRO <i class="bi bi-arrow-right"></i>
+            </button>
+        </div>
+    </div>
+
     <!-- START SCREEN (Audio Context Requirement) -->
     <div id="start-screen">
         <h1 style="text-align: center; font-size: 3rem; text-shadow: 0 0 20px var(--neon-cyan);">NEUROATLAS<br><span style="font-size: 1.5rem; color: #fff; font-weight: 300;">SONIC EDITION</span></h1>
@@ -218,6 +604,8 @@
 
     <!-- UI Layer -->
     <div id="ui-layer">
+        <div class="neuro-grid"></div>
+
         <div class="hud-header">
             <h1>NeuroAtlas<span style="color:var(--neon-purple)">.IO</span></h1>
             <div class="subtitle">Mapeamento Terapêutico Profundo</div>
@@ -236,15 +624,36 @@
 
         <!-- Controls -->
         <div class="sim-controls">
-            <div class="sim-btn active" onclick="setSimulation('normal', this)">
+            <div class="sim-btn active" id="btn-homeo" onclick="setSimulation('normal', this)">
                 <i class="bi bi-activity"></i> HOMEOSTASE
             </div>
-            <div class="sim-btn anxiety-mode" onclick="setSimulation('anxiety', this)">
+            <div class="sim-btn anxiety-mode" id="btn-anxiety" onclick="setSimulation('anxiety', this)">
                 <i class="bi bi-lightning-charge"></i> ANSIEDADE
             </div>
-            <div class="sim-btn depress-mode" onclick="setSimulation('depression', this)">
+            <div class="sim-btn depress-mode" id="btn-depress" onclick="setSimulation('depression', this)">
                 <i class="bi bi-cloud-fog2"></i> DEPRESSÃO
             </div>
+            <div class="sim-btn perf-toggle" onclick="togglePerformance(this)">
+                <i class="bi bi-cpu"></i> MODO PERFORMANCE
+            </div>
+        </div>
+
+        <!-- Sessões Guiadas -->
+        <div class="session-panel">
+            <div class="session-title">Sessões Guiadas</div>
+            <select id="session-select" class="session-select">
+                <option value="antiAnxiety">Anti-crise de ansiedade · 3 min</option>
+                <option value="depressionLift">Saída da inércia depressiva · 3 min</option>
+            </select>
+            <div class="session-buttons">
+                <button type="button" class="session-btn" onclick="startSelectedSession()">
+                    <i class="bi bi-play-fill"></i> Iniciar
+                </button>
+                <button type="button" class="session-btn stop" onclick="stopSession()">
+                    <i class="bi bi-stop-fill"></i> Parar
+                </button>
+            </div>
+            <div class="session-status" id="session-status">Nenhuma sessão ativa</div>
         </div>
 
         <!-- Monitor Químico -->
@@ -262,13 +671,41 @@
                 <div class="chem-label"><span>DOPAMINA</span> <span id="val-dopamine">65%</span></div>
                 <div class="progress-bg"><div id="bar-dopamine" class="progress-fill" style="width: 65%; background: var(--dopamine-gold)"></div></div>
             </div>
+            <div style="margin-top: 15px;">
+                <div style="font-family:'JetBrains Mono';font-size:0.7rem;color:#94a3b8;margin-bottom:4px;text-transform:uppercase;">
+                    Histórico (últimos 60s)
+                </div>
+                <canvas id="chem-chart" width="200" height="80"></canvas>
+            </div>
         </div>
 
         <div id="labels-container"></div>
+
+        <div class="neuro-footer">
+            <span>NEUROATLAS · SIMULADOR EDUCACIONAL</span>
+            <button type="button" onclick="openScienceOverview()">CIÊNCIA+</button>
+            <button type="button" onclick="openCircuitMap()">MAPA DE CIRCUITOS</button>
+        </div>
     </div>
 
     <!-- 3D World -->
     <div id="canvas-container"></div>
+
+    <!-- Modal Científico Extra -->
+    <div class="modal fade" id="science-modal" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Mapa Neurocientífico</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="science-modal-body"></div>
+                    <small>⚠ Conteúdo com propósito <strong>educacional</strong>, não substitui avaliação clínica.</small>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Modais (Estrutura) -->
     <div class="modal fade" id="generic-modal" tabindex="-1">
@@ -523,19 +960,102 @@
             }
         };
 
+        const scienceOverviewHTML = `
+            <div class="science-section">
+                <div class="science-section-title">Eixos Principais</div>
+                <p style="font-size:0.9rem; color:#e2e8f0;">
+                    O NeuroAtlas representa, de forma simplificada, a interação entre <strong>circuitos emocionais</strong>,
+                    <strong>controle executivo</strong> e <strong>neuroquímica sistêmica</strong>.
+                </p>
+                <div style="margin-bottom:10px;">
+                    <span class="science-chip"><strong>Eixo HPA</strong>: Estresse &rarr; Cortisol</span>
+                    <span class="science-chip"><strong>PFC → Amígdala</strong>: Inibição do medo</span>
+                    <span class="science-chip"><strong>Hipocampo</strong>: Contexto das memórias</span>
+                    <span class="science-chip"><strong>Ínsula</strong>: Consciência corporal</span>
+                    <span class="science-chip"><strong>Cingulado</strong>: Erro, dor emocional</span>
+                </div>
+            </div>
+            <hr class="text-secondary">
+            <div class="science-section">
+                <div class="science-section-title">Estados de Simulação</div>
+                <p style="font-size:0.9rem; color:#cbd5e1;">
+                    Cada modo de simulação (<strong>Homeostase</strong>, <strong>Ansiedade</strong>, <strong>Depressão</strong>)
+                    ajusta três camadas ao mesmo tempo:
+                </p>
+                <ul style="font-size:0.9rem; color:#e5e7eb;">
+                    <li><strong>Visual</strong>: Cor base das fibras, intensidade das partículas, rotação.</li>
+                    <li><strong>Neuroquímica</strong>: Níveis relativos de cortisol, serotonina e dopamina.</li>
+                    <li><strong>Som</strong>: Altura do tom e intensidade do drone binaural.</li>
+                </ul>
+            </div>
+            <hr class="text-secondary">
+            <div class="science-section">
+                <div class="science-section-title">Limitações e Ética</div>
+                <p style="font-size:0.8rem; color:#94a3b8;">
+                    Este modelo é uma <strong>visualização didática</strong>, não um simulador clínico real.  
+                    Serve para entender conceitos como <em>hiperatividade amigdalar</em>, <em>hipofrontalidade</em> e
+                    <em>neurotoxicidade do estresse crônico</em> de forma visual e intuitiva.
+                </p>
+            </div>
+        `;
+
+        const circuitMapHTML = `
+            <div class="science-section">
+                <div class="science-section-title">Mapa de Circuitos Funcionais</div>
+                <ul style="font-size:0.9rem; color:#e5e7eb; margin-bottom:10px;">
+                    <li><strong>PFC ⇄ Amígdala:</strong> Quando o PFC está forte, ele "conversa" com a amígdala e reavalia ameaças. Em ansiedade crônica, esse freio falha.</li>
+                    <li><strong>Amígdala → HPA → Cortisol:</strong> Alerta de perigo ativa eixo hipotálamo–hipófise–adrenal, elevando cortisol.</li>
+                    <li><strong>Hipocampo ⇄ Amígdala:</strong> O hipocampo fornece <em>contexto</em>: "isso é passado", "isso é memória". Sob estresse crônico, essa modulação enfraquece.</li>
+                    <li><strong>Cingulado Anterior:</strong> Monitora erros, rejeição e dor emocional, influenciando tanto amígdala quanto PFC.</li>
+                    <li><strong>Ínsula:</strong> Integra sinais corporais (batimentos, respiração) e colore a experiência subjetiva de ansiedade ou apatia.</li>
+                </ul>
+            </div>
+            <div class="science-section">
+                <div class="science-section-title">Leitura do Monitor Químico</div>
+                <ul style="font-size:0.9rem; color:#cbd5e1;">
+                    <li><strong>Cortisol alto + PFC instável:</strong> tendência a pensamento catastrófico, hipervigilância.</li>
+                    <li><strong>Serotonina baixa:</strong> dificuldade em sentir prazer básico, humor rebaixado.</li>
+                    <li><strong>Dopamina muito baixa:</strong> perda de motivação e energia para iniciar ações.</li>
+                </ul>
+            </div>
+        `;
+
+        window.openScienceOverview = () => {
+            const body = document.getElementById('science-modal-body');
+            body.innerHTML = scienceOverviewHTML;
+            const modal = new bootstrap.Modal(document.getElementById('science-modal'));
+            modal.show();
+        };
+
+        window.openCircuitMap = () => {
+            const body = document.getElementById('science-modal-body');
+            body.innerHTML = circuitMapHTML;
+            const modal = new bootstrap.Modal(document.getElementById('science-modal'));
+            modal.show();
+        };
+
         // --- STATE ---
         const state = {
             mode: 'normal',
             baseColor: new THREE.Color(0x00f3ff),
             flowSpeed: 0.002,
             cameraFocus: null, // { pos: Vector3, target: Vector3 } or null
-            defaultCamPos: new THREE.Vector3(0, 0, 14)
+            defaultCamPos: new THREE.Vector3(0, 0, 14),
+            performanceMode: false
         };
 
-        // --- INIT ---
+        let isTabActive = true;
+        document.addEventListener('visibilitychange', () => {
+            isTabActive = !document.hidden;
+        });
+
         const container = document.getElementById('canvas-container');
         const labelContainer = document.getElementById('labels-container');
         const labels = [];
+
+        const btnHomeo = document.getElementById('btn-homeo');
+        const btnAnxiety = document.getElementById('btn-anxiety');
+        const btnDepress = document.getElementById('btn-depress');
         
         const scene = new THREE.Scene();
         scene.fog = new THREE.FogExp2(0x020408, 0.035);
@@ -608,7 +1128,16 @@
             particleCurveIndex[i] = Math.floor(Math.random() * tractography.curveObjects.length);
         }
         particleGeo.setAttribute('position', new THREE.BufferAttribute(particlePos, 3));
-        const particles = new THREE.Points(particleGeo, new THREE.PointsMaterial({ color: 0xffffff, size: 0.08, transparent: true, opacity: 0.8, blending: THREE.AdditiveBlending }));
+        const particles = new THREE.Points(
+            particleGeo,
+            new THREE.PointsMaterial({
+                color: 0xffffff,
+                size: 0.08,
+                transparent: true,
+                opacity: 0.8,
+                blending: THREE.AdditiveBlending
+            })
+        );
         brainGroup.add(particles);
 
         // Hotspots
@@ -632,11 +1161,250 @@
         addLabel(0, 0.5, 1.5, 'modal-acc', 'CINGULADO');
         addLabel(1.5, -0.2, 1.0, 'modal-insula', 'ÍNSULA');
 
+        // --- BOOT SEQUENCE ---
+        function runBootSequence() {
+            const logEl = document.getElementById('boot-log');
+            const btn = document.getElementById('boot-btn');
+
+            const lines = [
+                '[BOOT] Carregando matriz de conectividade cortical...',
+                '[OK]  Tratos fronto-límbicos inicializados.',
+                '[BOOT] Sincronizando PFC ⇄ Amígdala...',
+                '[OK]  Inibição top-down funcional.',
+                '[BOOT] Ativando eixo HPA (modo simulado)...',
+                '[OK]  Cortisol pronto para modulação visual.',
+                '[BOOT] Mapeando hipocampo e indexando memórias contextuais...',
+                '[BOOT] Integrando sinais da Ínsula (interocepção)...',
+                '[OK]  Mapa visceral disponível.',
+                '[BOOT] Cingulado anterior: monitor de erro e dor emocional online.',
+                '[OK]  Painel de estados pronto.',
+                '[SYS]  Renderizador 3D carregado. Partículas sinápticas em standby.',
+                '[SYS]  Modo SONIC pronto para acoplamento ao usuário.',
+                '',
+                '>>> Pressione ENTRAR NO CÉREBRO para iniciar a sessão interativa.'
+            ];
+
+            let idx = 0;
+            const interval = setInterval(() => {
+                if (idx >= lines.length) {
+                    clearInterval(interval);
+                    btn.style.display = 'inline-flex';
+                    return;
+                }
+                const line = document.createElement('div');
+                line.textContent = lines[idx];
+                logEl.appendChild(line);
+                logEl.scrollTop = logEl.scrollHeight;
+                idx++;
+            }, 230);
+        }
+
+        window.showStartScreen = () => {
+            const boot = document.getElementById('boot-screen');
+            const start = document.getElementById('start-screen');
+            boot.style.opacity = '0';
+            setTimeout(() => {
+                boot.style.display = 'none';
+                start.style.display = 'flex';
+                requestAnimationFrame(() => {
+                    start.style.opacity = '1';
+                });
+            }, 600);
+        };
+
+        runBootSequence();
+
+        // --- CHEM STATE & CHART ---
+        const chemState = { c: 15, s: 80, d: 65 };
+
+        const chemChartCanvas = document.getElementById('chem-chart');
+        const chemChartCtx = chemChartCanvas.getContext('2d');
+        const chemHistory = { c: [], s: [], d: [] };
+        const maxHistoryPoints = 60;
+
+        function recordChemHistory() {
+            chemHistory.c.push(chemState.c);
+            chemHistory.s.push(chemState.s);
+            chemHistory.d.push(chemState.d);
+            ['c', 's', 'd'].forEach(k => {
+                if (chemHistory[k].length > maxHistoryPoints) chemHistory[k].shift();
+            });
+            drawChemChart();
+        }
+
+        function drawChemChart() {
+            const ctx = chemChartCtx;
+            const w = chemChartCanvas.width;
+            const h = chemChartCanvas.height;
+            ctx.clearRect(0, 0, w, h);
+
+            // fundo
+            ctx.fillStyle = 'rgba(15,23,42,0.95)';
+            ctx.fillRect(0, 0, w, h);
+
+            // grid
+            ctx.strokeStyle = 'rgba(148,163,184,0.25)';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            for (let i = 0; i <= 4; i++) {
+                const y = (h - 10) * (i / 4) + 5;
+                ctx.moveTo(0, y);
+                ctx.lineTo(w, y);
+            }
+            ctx.stroke();
+
+            const drawLine = (data, color) => {
+                if (data.length < 2) return;
+                ctx.strokeStyle = color;
+                ctx.lineWidth = 1.5;
+                ctx.beginPath();
+                data.forEach((val, idx) => {
+                    const x = (w - 10) * (idx / (maxHistoryPoints - 1)) + 5;
+                    const y = h - 5 - (h - 10) * (val / 100);
+                    if (idx === 0) ctx.moveTo(x, y);
+                    else ctx.lineTo(x, y);
+                });
+                ctx.stroke();
+            };
+
+            drawLine(chemHistory.c, '#ff2a2a');
+            drawLine(chemHistory.s, '#00ff9d');
+            drawLine(chemHistory.d, '#ffcc00');
+        }
+
+        setInterval(recordChemHistory, 1000);
+
+        // --- SESSÕES GUIADAS ---
+        const sessionConfigs = {
+            antiAnxiety: {
+                label: 'Anti-crise de ansiedade',
+                duration: 180,
+                relaxStart: 30,
+                modeStart: 'anxiety',
+                targetChem: { c: 20, s: 80, d: 60 }
+            },
+            depressionLift: {
+                label: 'Saída da inércia depressiva',
+                duration: 180,
+                relaxStart: 20,
+                modeStart: 'depression',
+                targetChem: { c: 30, s: 65, d: 55 }
+            }
+        };
+
+        let sessionState = {
+            active: false,
+            type: null,
+            elapsed: 0,
+            duration: 0,
+            timerId: null,
+            label: '',
+            startChem: null,
+            config: null
+        };
+
+        function formatTime(sec) {
+            const m = Math.floor(sec / 60);
+            const s = sec % 60;
+            return `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+        }
+
+        function updateSessionStatus() {
+            const el = document.getElementById('session-status');
+            if (!el) return;
+            if (!sessionState.active) {
+                el.textContent = 'Nenhuma sessão ativa';
+                return;
+            }
+            const remaining = Math.max(0, sessionState.duration - sessionState.elapsed);
+            el.textContent = `${sessionState.label} – restante ${formatTime(remaining)}`;
+        }
+
+        function startSession(type) {
+            const config = sessionConfigs[type];
+            if (!config) return;
+
+            // Se já tiver sessão rodando, encerra silenciosamente
+            stopSession(true);
+
+            sessionState = {
+                active: true,
+                type,
+                elapsed: 0,
+                duration: config.duration,
+                timerId: null,
+                label: config.label,
+                startChem: null,
+                config
+            };
+
+            // Ajusta modo inicial
+            if (config.modeStart === 'anxiety') {
+                setSimulation('anxiety');
+            } else if (config.modeStart === 'depression') {
+                setSimulation('depression');
+            } else {
+                setSimulation('normal');
+            }
+
+            // captura química inicial após setSimulation
+            sessionState.startChem = { ...chemState };
+
+            updateSessionStatus();
+
+            sessionState.timerId = setInterval(() => {
+                if (!sessionState.active || !sessionState.config) return;
+
+                sessionState.elapsed++;
+
+                const cfg = sessionState.config;
+
+                if (sessionState.elapsed >= cfg.relaxStart) {
+                    const tRaw = (sessionState.elapsed - cfg.relaxStart) / (cfg.duration - cfg.relaxStart);
+                    const t = Math.max(0, Math.min(1, tRaw));
+
+                    const nc = Math.round(sessionState.startChem.c + (cfg.targetChem.c - sessionState.startChem.c) * t);
+                    const ns = Math.round(sessionState.startChem.s + (cfg.targetChem.s - sessionState.startChem.s) * t);
+                    const nd = Math.round(sessionState.startChem.d + (cfg.targetChem.d - sessionState.startChem.d) * t);
+                    updateChem(nc, ns, nd);
+                }
+
+                updateSessionStatus();
+
+                if (sessionState.elapsed >= cfg.duration) {
+                    // encerra levando para homeostase
+                    setSimulation('normal');
+                    stopSession(true);
+                    updateSessionStatus();
+                }
+            }, 1000);
+        }
+
+        window.startSelectedSession = () => {
+            const select = document.getElementById('session-select');
+            if (!select) return;
+            startSession(select.value);
+        };
+
+        window.stopSession = (silent) => {
+            if (sessionState.timerId) {
+                clearInterval(sessionState.timerId);
+            }
+            sessionState.timerId = null;
+            sessionState.active = false;
+            sessionState.type = null;
+            sessionState.config = null;
+            if (!silent) {
+                updateSessionStatus();
+            }
+        };
+
         // --- FUNCTIONS ---
 
         window.initExperience = () => {
-            document.getElementById('start-screen').style.opacity = 0;
-            setTimeout(() => document.getElementById('start-screen').style.display = 'none', 800);
+            const start = document.getElementById('start-screen');
+            start.style.opacity = 0;
+            setTimeout(() => start.style.display = 'none', 800);
             audioSys.init();
             audioSys.setMode('normal');
         };
@@ -669,7 +1437,7 @@
         const raycaster = new THREE.Raycaster();
         const mouse = new THREE.Vector2();
         window.addEventListener('pointerdown', (e) => {
-            if(e.target.closest('.sim-controls') || e.target.closest('.chem-monitor')) return;
+            if(e.target.closest('.sim-controls') || e.target.closest('.chem-monitor') || e.target.closest('.session-panel')) return;
             
             mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
             mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
@@ -693,15 +1461,39 @@
                     // Reset camera when modal closes
                     document.getElementById('generic-modal').addEventListener('hidden.bs.modal', () => {
                         state.cameraFocus = null;
-                    });
+                    }, { once: true });
                 }
             }
         });
 
+        function updateChem(c, s, d) {
+            chemState.c = c;
+            chemState.s = s;
+            chemState.d = d;
+            document.getElementById('bar-cortisol').style.width = c + '%'; document.getElementById('val-cortisol').innerText = c + '%';
+            document.getElementById('bar-serotonin').style.width = s + '%'; document.getElementById('val-serotonin').innerText = s + '%';
+            document.getElementById('bar-dopamine').style.width = d + '%'; document.getElementById('val-dopamine').innerText = d + '%';
+        }
+
         // Simulation Control
         window.setSimulation = (mode, btn) => {
-            document.querySelectorAll('.sim-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
+            // limpa active dos modos principais
+            document.querySelectorAll('.sim-btn').forEach(b => {
+                if (!b.classList.contains('perf-toggle')) {
+                    b.classList.remove('active');
+                }
+            });
+
+            if (!btn) {
+                if (mode === 'normal') btn = btnHomeo;
+                else if (mode === 'anxiety') btn = btnAnxiety;
+                else if (mode === 'depression') btn = btnDepress;
+            }
+
+            if (btn) {
+                btn.classList.add('active');
+            }
+
             state.mode = mode;
             audioSys.setMode(mode);
 
@@ -727,15 +1519,36 @@
             }
         };
 
-        function updateChem(c, s, d) {
-            document.getElementById('bar-cortisol').style.width = c + '%'; document.getElementById('val-cortisol').innerText = c + '%';
-            document.getElementById('bar-serotonin').style.width = s + '%'; document.getElementById('val-serotonin').innerText = s + '%';
-            document.getElementById('bar-dopamine').style.width = d + '%'; document.getElementById('val-dopamine').innerText = d + '%';
-        }
+        window.togglePerformance = (btn) => {
+            state.performanceMode = !state.performanceMode;
+            if (btn) {
+                btn.classList.toggle('active', state.performanceMode);
+            }
+
+            if (state.performanceMode) {
+                // Reduz um pouco o custo gráfico
+                renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+                bloomPass.strength = 1.2;
+                particles.material.size = 0.06;
+                particles.material.needsUpdate = true;
+            } else {
+                // Volta para o padrão original
+                renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+                bloomPass.strength = 2.0;
+                particles.material.size = 0.08;
+                particles.material.needsUpdate = true;
+            }
+        };
 
         // Loop
         function animate() {
             requestAnimationFrame(animate);
+
+            // Se a aba não estiver ativa e não estiver em modo performance, simplifica
+            if (!isTabActive && !state.performanceMode) {
+                composer.render();
+                return;
+            }
             
             // Camera Logic
             if(state.cameraFocus) {
