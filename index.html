@@ -866,8 +866,7 @@
         </div>
     </div>
 
-
-    <script type="module">
+<script type="module">
         import * as THREE from 'three';
         import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
         import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
@@ -887,7 +886,7 @@
 
             init() {
                 this.ctx = new (window.AudioContext || window.webkitAudioContext)();
-                
+
                 // Master Drone
                 this.droneOsc = this.ctx.createOscillator();
                 this.droneGain = this.ctx.createGain();
@@ -909,19 +908,17 @@
             }
 
             setMode(mode) {
-                if(!this.ctx || this.isMuted) return;
+                if (!this.ctx || this.isMuted) return;
 
                 const now = this.ctx.currentTime;
-                if(mode === 'normal') {
+                if (mode === 'normal') {
                     this.droneOsc.frequency.linearRampToValueAtTime(110, now + 2);
                     this.droneGain.gain.linearRampToValueAtTime(0.1, now + 2);
-                } 
-                else if (mode === 'anxiety') {
+                } else if (mode === 'anxiety') {
                     // High pitch, dissonance
                     this.droneOsc.frequency.linearRampToValueAtTime(330, now + 1); // E4
                     this.droneGain.gain.linearRampToValueAtTime(0.15, now + 1);
-                } 
-                else if (mode === 'depression') {
+                } else if (mode === 'depression') {
                     // Low pitch, rumble
                     this.droneOsc.frequency.linearRampToValueAtTime(55, now + 3); // A1
                     this.droneGain.gain.linearRampToValueAtTime(0.15, now + 3);
@@ -930,8 +927,12 @@
 
             toggle() {
                 this.isMuted = !this.isMuted;
-                if(this.ctx) {
-                    this.droneGain.gain.setTargetAtTime(this.isMuted ? 0 : 0.1, this.ctx.currentTime, 0.1);
+                if (this.ctx) {
+                    this.droneGain.gain.setTargetAtTime(
+                        this.isMuted ? 0 : 0.1,
+                        this.ctx.currentTime,
+                        0.1
+                    );
                 }
                 return this.isMuted;
             }
@@ -943,155 +944,155 @@
         const modalData = {
             'modal-amygdala': {
                 title: 'AMÍGDALA (O Sentinela)',
-                normal: { 
+                normal: {
                     behavior: `
                         <p class="lead">O detector de relevância emocional.</p>
                         <ul class="behavior-list">
                             <li><strong>Função:</strong> Avalia o ambiente em milissegundos para identificar o que é importante, seguro ou perigoso.</li>
                             <li><strong>Comportamento:</strong> Você se sente alerta, mas calmo. Consegue distinguir um perigo real (cobra) de um alarme falso (mangueira).</li>
-                        </ul>`, 
-                    mech: `<strong>Conexão Segura:</strong> O Córtex Pré-Frontal (CEO) mantém uma linha direta inibitória com a Amígdala via GABA, dizendo "está tudo bem, não dispare".` 
+                        </ul>`,
+                    mech: `<strong>Conexão Segura:</strong> O Córtex Pré-Frontal (CEO) mantém uma linha direta inibitória com a Amígdala via GABA, dizendo "está tudo bem, não dispare".`
                 },
-                anxiety: { 
+                anxiety: {
                     behavior: `
                         <p class="lead" style="color:var(--alert-red)">Alarme de Incêndio Travado.</p>
                         <ul class="behavior-list">
                             <li><strong>Hipervigilância:</strong> O cérebro trata e-mails, olhares ou pensamentos como ameaças de morte (predadores).</li>
                             <li><strong>Sequestro Emocional:</strong> Dificuldade extrema em se acalmar racionalmente. Sensação física de perigo iminente.</li>
                             <li><strong>Evitação:</strong> O medo leva a evitar situações sociais ou lugares específicos.</li>
-                        </ul>`, 
-                    mech: `<strong>Falha na Inibição:</strong> A conexão "freio" do Pré-Frontal falha. A Amígdala hiperativa sequestra o eixo HPA, inundando o corpo de Adrenalina e Cortisol desnecessariamente.` 
+                        </ul>`,
+                    mech: `<strong>Falha na Inibição:</strong> A conexão "freio" do Pré-Frontal falha. A Amígdala hiperativa sequestra o eixo HPA, inundando o corpo de Adrenalina e Cortisol desnecessariamente.`
                 },
-                depression: { 
+                depression: {
                     behavior: `
                         <p class="lead" style="color:#aab2bd">O Viés da Tristeza.</p>
                         <ul class="behavior-list">
                             <li><strong>Filtro Negativo:</strong> O cérebro ignora eventos felizes e foca obsessivamente em memórias de perda, culpa ou fracasso.</li>
                             <li><strong>Reatividade Sustentada:</strong> Quando algo ruim acontece, a amígdala "segura" a emoção negativa por muito mais tempo que o normal.</li>
-                        </ul>`, 
-                    mech: `<strong>Desregulação Límbica:</strong> Alteração na sensibilidade. A amígdala torna-se hipersensível a estímulos tristes e cega para estímulos de recompensa.` 
+                        </ul>`,
+                    mech: `<strong>Desregulação Límbica:</strong> Alteração na sensibilidade. A amígdala torna-se hipersensível a estímulos tristes e cega para estímulos de recompensa.`
                 }
             },
             'modal-pfc': {
                 title: 'PRÉ-FRONTAL (O Executivo)',
-                normal: { 
+                normal: {
                     behavior: `
                         <p class="lead">O Maestro da Orquestra.</p>
                         <ul class="behavior-list">
                             <li><strong>Função:</strong> Planejamento, foco, controle de impulsos e regulação das emoções.</li>
                             <li><strong>Comportamento:</strong> Você consegue priorizar tarefas, controlar a frustração e manter a atenção sustentada.</li>
-                        </ul>`, 
-                    mech: `<strong>Top-Down Control:</strong> Vias robustas de Glutamato permitem que a lógica regule as áreas emocionais primitivas.` 
+                        </ul>`,
+                    mech: `<strong>Top-Down Control:</strong> Vias robustas de Glutamato permitem que a lógica regule as áreas emocionais primitivas.`
                 },
-                anxiety: { 
+                anxiety: {
                     behavior: `
                         <p class="lead" style="color:var(--alert-red)">O CEO em Pânico.</p>
                         <ul class="behavior-list">
                             <li><strong>Pensamento Acelerado:</strong> "E se..." catastrófico. O cérebro simula dezenas de cenários de desastre por minuto.</li>
                             <li><strong>Branco Mental:</strong> Sob pressão, você esquece o que ia dizer. O excesso de ruído neural bloqueia o acesso à memória.</li>
                             <li><strong>Paralisia por Análise:</strong> Medo excessivo de tomar a decisão errada.</li>
-                        </ul>`, 
-                    mech: `<strong>Curto-Circuito de Catecolaminas:</strong> Níveis excessivos de Dopamina e Noradrenalina no PFC "desligam" a atividade neuronal organizada, prejudicando a cognição.` 
+                        </ul>`,
+                    mech: `<strong>Curto-Circuito de Catecolaminas:</strong> Níveis excessivos de Dopamina e Noradrenalina no PFC "desligam" a atividade neuronal organizada, prejudicando a cognição.`
                 },
-                depression: { 
+                depression: {
                     behavior: `
                         <p class="lead" style="color:#aab2bd">O Sistema Offline.</p>
                         <ul class="behavior-list">
                             <li><strong>Névoa Mental:</strong> Pensar parece exigir um esforço físico exaustivo. Sensação de lentidão.</li>
                             <li><strong>Avolição:</strong> Perda da "vontade". Você quer fazer algo, mas não consegue iniciar a ação motora.</li>
                             <li><strong>Indecisão:</strong> Dificuldade extrema até em escolhas triviais (ex: o que comer).</li>
-                        </ul>`, 
-                    mech: `<strong>Hipofrontalidade:</strong> Redução severa do fluxo sanguíneo e metabolismo no lobo frontal. Atrofia das espinhas dendríticas, reduzindo a conectividade sináptica.` 
+                        </ul>`,
+                    mech: `<strong>Hipofrontalidade:</strong> Redução severa do fluxo sanguíneo e metabolismo no lobo frontal. Atrofia das espinhas dendríticas, reduzindo a conectividade sináptica.`
                 }
             },
             'modal-hippo': {
                 title: 'HIPOCAMPO (O Arquivista)',
-                normal: { 
+                normal: {
                     behavior: `
                         <p class="lead">O Guardião da Memória.</p>
                         <ul class="behavior-list">
                             <li><strong>Função:</strong> Transforma experiências de curto prazo em memórias de longo prazo. Navegação espacial e contextualização.</li>
                             <li><strong>Comportamento:</strong> Você sabe onde deixou as chaves e distingue claramente o passado do presente.</li>
-                        </ul>`, 
-                    mech: `<strong>Neurogênese Adulta:</strong> O cérebro saudável continua produzindo novos neurônios nesta área, facilitado pelo BDNF.` 
+                        </ul>`,
+                    mech: `<strong>Neurogênese Adulta:</strong> O cérebro saudável continua produzindo novos neurônios nesta área, facilitado pelo BDNF.`
                 },
-                anxiety: { 
+                anxiety: {
                     behavior: `
                         <p class="lead" style="color:var(--alert-red)">Memória Fragmentada.</p>
                         <ul class="behavior-list">
                             <li><strong>Déficit de Atenção:</strong> A mente está tão ocupada monitorando "ameaças" que não grava o que alguém acabou de dizer.</li>
                             <li><strong>Generalização:</strong> O medo de um evento específico se espalha para contextos seguros (ex: medo de dirigir vira medo de sair de casa).</li>
-                        </ul>`, 
-                    mech: `<strong>Supressão da LTP:</strong> O cortisol elevado interfere na Potenciação de Longa Duração, o mecanismo celular base da memória.` 
+                        </ul>`,
+                    mech: `<strong>Supressão da LTP:</strong> O cortisol elevado interfere na Potenciação de Longa Duração, o mecanismo celular base da memória.`
                 },
-                depression: { 
+                depression: {
                     behavior: `
                         <p class="lead" style="color:#aab2bd">O Arquivo Corrompido.</p>
                         <ul class="behavior-list">
                             <li><strong>Memória Supergeneralizada:</strong> Dificuldade em lembrar detalhes específicos de eventos felizes passados.</li>
                             <li><strong>Fusão Temporal:</strong> Sensação de que "todos os dias são iguais". Perda da noção de tempo.</li>
-                        </ul>`, 
-                    mech: `<strong>Neurotoxicidade:</strong> O estresse crônico é tóxico para o hipocampo, causando redução física de volume (atrofia) de até 20% em casos graves.` 
+                        </ul>`,
+                    mech: `<strong>Neurotoxicidade:</strong> O estresse crônico é tóxico para o hipocampo, causando redução física de volume (atrofia) de até 20% em casos graves.`
                 }
             },
             'modal-acc': {
                 title: 'CINGULADO (O Avaliador)',
-                normal: { 
+                normal: {
                     behavior: `
                         <p class="lead">O Detector de Conflitos.</p>
                         <ul class="behavior-list">
                             <li><strong>Função:</strong> Monitora erros, expectativas não atendidas e dor emocional.</li>
                             <li><strong>Comportamento:</strong> Você percebe um erro, corrige e segue em frente sem sofrimento excessivo.</li>
-                        </ul>`, 
-                    mech: `<strong>Sinalização Eficiente:</strong> Comunica-se rapidamente com o Pré-Frontal para ajustar o comportamento diante de erros.` 
+                        </ul>`,
+                    mech: `<strong>Sinalização Eficiente:</strong> Comunica-se rapidamente com o Pré-Frontal para ajustar o comportamento diante de erros.`
                 },
-                anxiety: { 
+                anxiety: {
                     behavior: `
                         <p class="lead" style="color:var(--alert-red)">A Sirene de Erro.</p>
                         <ul class="behavior-list">
                             <li><strong>Obsessão:</strong> Preocupação constante de que algo está errado ou foi esquecido.</li>
                             <li><strong>Perfeccionismo Tóxico:</strong> Medo paralisante de cometer qualquer erro, interpretando falhas pequenas como catástrofes.</li>
-                        </ul>`, 
-                    mech: `<strong>Hiperatividade do ERN:</strong> O sinal neural de "Negatividade Relacionada ao Erro" dispara com intensidade exagerada.` 
+                        </ul>`,
+                    mech: `<strong>Hiperatividade do ERN:</strong> O sinal neural de "Negatividade Relacionada ao Erro" dispara com intensidade exagerada.`
                 },
-                depression: { 
+                depression: {
                     behavior: `
                         <p class="lead" style="color:#aab2bd">A Dor da Alma.</p>
                         <ul class="behavior-list">
                             <li><strong>Dor Psíquica:</strong> A angústia da depressão é processada aqui, muitas vezes sentida como uma dor física real no peito ("coração partido").</li>
                             <li><strong>Ruminação:</strong> Ficar preso em um loop mental repassando falhas e rejeições passadas.</li>
-                        </ul>`, 
-                    mech: `<strong>Sobreposição de Dor:</strong> O Cingulado processa a dor social (rejeição) usando os mesmos circuitos neurais da dor física (corte, queimadura).` 
+                        </ul>`,
+                    mech: `<strong>Sobreposição de Dor:</strong> O Cingulado processa a dor social (rejeição) usando os mesmos circuitos neurais da dor física (corte, queimadura).`
                 }
             },
             'modal-insula': {
                 title: 'ÍNSULA (O Sensor)',
-                normal: { 
+                normal: {
                     behavior: `
                         <p class="lead">A Consciência do Corpo.</p>
                         <ul class="behavior-list">
                             <li><strong>Função:</strong> Interocepção. Sente o que acontece dentro do corpo (fome, batimentos, temperatura) e gera sentimentos subjetivos.</li>
                             <li><strong>Comportamento:</strong> Você sente seu coração acelerar ao correr, mas sabe que é exercício, não perigo.</li>
-                        </ul>`, 
-                    mech: `<strong>Integração Visceral:</strong> Mapeia dados do corpo para criar a sensação de "eu sinto".` 
+                        </ul>`,
+                    mech: `<strong>Integração Visceral:</strong> Mapeia dados do corpo para criar a sensação de "eu sinto".`
                 },
-                anxiety: { 
+                anxiety: {
                     behavior: `
                         <p class="lead" style="color:var(--alert-red)">O Amplificador de Sintomas.</p>
                         <ul class="behavior-list">
                             <li><strong>Catastrofização Corporal:</strong> Uma leve taquicardia é interpretada imediatamente como um ataque cardíaco (Pânico).</li>
                             <li><strong>Sensação de Sufocamento:</strong> Falsa percepção de falta de ar ("fome de ar") mesmo com oxigenação normal.</li>
-                        </ul>`, 
-                    mech: `<strong>Erro de Predição Interoceptiva:</strong> O cérebro prevê sensações corporais negativas e amplifica o "volume" dos sinais viscerais reais.` 
+                        </ul>`,
+                    mech: `<strong>Erro de Predição Interoceptiva:</strong> O cérebro prevê sensações corporais negativas e amplifica o "volume" dos sinais viscerais reais.`
                 },
-                depression: { 
+                depression: {
                     behavior: `
                         <p class="lead" style="color:#aab2bd">O Corpo Pesado.</p>
                         <ul class="behavior-list">
                             <li><strong>Letargia Física:</strong> Sensação de que o corpo pesa toneladas ("paralisia de chumbo").</li>
                             <li><strong>Perda de Libido e Apetite:</strong> Desconexão com os impulsos vitais básicos.</li>
-                        </ul>`, 
-                    mech: `<strong>Sickness Behavior:</strong> A ínsula sinaliza um estado sistêmico similar a uma gripe infecciosa, ordenando ao corpo que conserve energia e se isole.` 
+                        </ul>`,
+                    mech: `<strong>Sickness Behavior:</strong> A ínsula sinaliza um estado sistêmico similar a uma gripe infecciosa, ordenando ao corpo que conserve energia e se isole.`
                 }
             }
         };
@@ -1192,11 +1193,16 @@
         const btnHomeo = document.getElementById('btn-homeo');
         const btnAnxiety = document.getElementById('btn-anxiety');
         const btnDepress = document.getElementById('btn-depress');
-        
+
         const scene = new THREE.Scene();
         scene.fog = new THREE.FogExp2(0x020408, 0.035);
 
-        const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 100);
+        const camera = new THREE.PerspectiveCamera(
+            60,
+            window.innerWidth / window.innerHeight,
+            0.1,
+            100
+        );
         camera.position.copy(state.defaultCamPos);
 
         const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
@@ -1212,7 +1218,12 @@
         controls.enablePan = false;
 
         const composer = new EffectComposer(renderer);
-        const bloomPass = new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 1.5, 0.4, 0.85);
+        const bloomPass = new UnrealBloomPass(
+            new THREE.Vector2(window.innerWidth, window.innerHeight),
+            1.5,
+            0.4,
+            0.85
+        );
         bloomPass.strength = 2.0;
         composer.addPass(new RenderPass(scene, camera));
         composer.addPass(bloomPass);
@@ -1227,25 +1238,51 @@
             const curvePoints = [];
             const colors = [];
             const geometry = new THREE.BufferGeometry();
-            const material = new THREE.LineBasicMaterial({ vertexColors: true, transparent: true, opacity: 0.15, blending: THREE.AdditiveBlending });
+            const material = new THREE.LineBasicMaterial({
+                vertexColors: true,
+                transparent: true,
+                opacity: 0.15,
+                blending: THREE.AdditiveBlending
+            });
             const positions = [];
-            
-            for(let i=0; i<fiberCount; i++) {
-                const p1 = new THREE.Vector3((Math.random()-0.5)*3, (Math.random()-0.5)*3, (Math.random()-0.5)*3);
-                const p2 = new THREE.Vector3((Math.random()-0.5)*5, (Math.random()-0.5)*4, (Math.random()-0.5)*5);
-                const p3 = new THREE.Vector3((Math.random()-0.5)*5, (Math.random()-0.5)*4, (Math.random()-0.5)*5);
-                const p4 = new THREE.Vector3((Math.random()-0.5)*3, (Math.random()-0.5)*3, (Math.random()-0.5)*3);
+
+            for (let i = 0; i < fiberCount; i++) {
+                const p1 = new THREE.Vector3(
+                    (Math.random() - 0.5) * 3,
+                    (Math.random() - 0.5) * 3,
+                    (Math.random() - 0.5) * 3
+                );
+                const p2 = new THREE.Vector3(
+                    (Math.random() - 0.5) * 5,
+                    (Math.random() - 0.5) * 4,
+                    (Math.random() - 0.5) * 5
+                );
+                const p3 = new THREE.Vector3(
+                    (Math.random() - 0.5) * 5,
+                    (Math.random() - 0.5) * 4,
+                    (Math.random() - 0.5) * 5
+                );
+                const p4 = new THREE.Vector3(
+                    (Math.random() - 0.5) * 3,
+                    (Math.random() - 0.5) * 3,
+                    (Math.random() - 0.5) * 3
+                );
                 const curve = new THREE.CubicBezierCurve3(p1, p2, p3, p4);
                 const points = curve.getPoints(20);
-                for(let j=0; j<points.length-1; j++) {
+                for (let j = 0; j < points.length - 1; j++) {
                     positions.push(points[j].x, points[j].y, points[j].z);
-                    positions.push(points[j+1].x, points[j+1].y, points[j+1].z);
-                    const c1 = new THREE.Color(0x00f3ff); const c2 = new THREE.Color(0xbc13fe);
-                    colors.push(c1.r, c1.g, c1.b); colors.push(c2.r, c2.g, c2.b);
+                    positions.push(points[j + 1].x, points[j + 1].y, points[j + 1].z);
+                    const c1 = new THREE.Color(0x00f3ff);
+                    const c2 = new THREE.Color(0xbc13fe);
+                    colors.push(c1.r, c1.g, c1.b);
+                    colors.push(c2.r, c2.g, c2.b);
                 }
                 curvePoints.push(curve);
             }
-            geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+            geometry.setAttribute(
+                'position',
+                new THREE.Float32BufferAttribute(positions, 3)
+            );
             geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
             const fibers = new THREE.LineSegments(geometry, material);
             brainGroup.add(fibers);
@@ -1259,9 +1296,11 @@
         const particlePos = new Float32Array(particleCount * 3);
         const particleProgress = new Float32Array(particleCount);
         const particleCurveIndex = new Int16Array(particleCount);
-        for(let i=0; i<particleCount; i++) {
+        for (let i = 0; i < particleCount; i++) {
             particleProgress[i] = Math.random();
-            particleCurveIndex[i] = Math.floor(Math.random() * tractography.curveObjects.length);
+            particleCurveIndex[i] = Math.floor(
+                Math.random() * tractography.curveObjects.length
+            );
         }
         particleGeo.setAttribute('position', new THREE.BufferAttribute(particlePos, 3));
         const particles = new THREE.Points(
@@ -1277,62 +1316,253 @@
         brainGroup.add(particles);
 
         // Hotspots
-        function addLabel(x,y,z, id, text) {
+        function addLabel(x, y, z, id, text) {
             const g = new THREE.Group();
-            g.position.set(x,y,z);
-            const sphere = new THREE.Mesh(new THREE.IcosahedronGeometry(0.12, 1), new THREE.MeshBasicMaterial({color:0xffffff}));
-            const halo = new THREE.Mesh(new THREE.SphereGeometry(0.25, 16, 16), new THREE.MeshBasicMaterial({color:0x00f3ff, transparent:true, opacity:0.3}));
-            g.add(sphere); g.add(halo);
-            g.userData = { modalId: id, isHotspot: true, focusPos: new THREE.Vector3(x*1.5, y*1.5, z + 4) }; // Camera target offset
+            g.position.set(x, y, z);
+            const sphere = new THREE.Mesh(
+                new THREE.IcosahedronGeometry(0.12, 1),
+                new THREE.MeshBasicMaterial({ color: 0xffffff })
+            );
+            const halo = new THREE.Mesh(
+                new THREE.SphereGeometry(0.25, 16, 16),
+                new THREE.MeshBasicMaterial({
+                    color: 0x00f3ff,
+                    transparent: true,
+                    opacity: 0.3
+                })
+            );
+            g.add(sphere);
+            g.add(halo);
+            g.userData = {
+                modalId: id,
+                isHotspot: true,
+                focusPos: new THREE.Vector3(x * 1.5, y * 1.5, z + 4)
+            }; // Camera target offset
             brainGroup.add(g);
             const el = document.createElement('div');
             el.className = 'hotspot-label';
             el.innerHTML = `${text}<div class="line-connector"></div>`;
             labelContainer.appendChild(el);
-            labels.push({obj: g, el: el});
+            labels.push({ obj: g, el: el });
         }
         addLabel(0, -0.8, 1.8, 'modal-amygdala', 'AMÍGDALA');
         addLabel(0, 1.8, 1.2, 'modal-pfc', 'PRÉ-FRONTAL');
-        addLabel(-1.5, -0.3, 0.8, 'modal-hippo', 'HIPOCAMPO');
-        addLabel(0, 0.5, 1.5, 'modal-acc', 'CINGULADO');
-        addLabel(1.5, -0.2, 1.0, 'modal-insula', 'ÍNSULA');
+        addLabel(-1.5, -0.4, -0.8, 'modal-hippo', 'HIPOCAMPO');
+        addLabel(1.4, 0.2, -1.2, 'modal-acc', 'CINGULADO');
+        addLabel(-1.2, 0.6, 1.4, 'modal-insula', 'ÍNSULA');
 
-        // --- BOOT SEQUENCE ---
-        function runBootSequence() {
-            const logEl = document.getElementById('boot-log');
-            const btn = document.getElementById('boot-btn');
+        // Ambient Light + subtle directional
+        const ambient = new THREE.AmbientLight(0x88cfff, 0.4);
+        scene.add(ambient);
+        const dir = new THREE.DirectionalLight(0xffffff, 0.6);
+        dir.position.set(4, 4, 6);
+        scene.add(dir);
 
-            const lines = [
-                '[BOOT] Carregando matriz de conectividade cortical...',
-                '[OK]  Tratos fronto-límbicos inicializados.',
-                '[BOOT] Sincronizando PFC ⇄ Amígdala...',
-                '[OK]  Inibição top-down funcional.',
-                '[BOOT] Ativando eixo HPA (modo simulado)...',
-                '[OK]  Cortisol pronto para modulação visual.',
-                '[BOOT] Mapeando hipocampo e indexando memórias contextuais...',
-                '[BOOT] Integrando sinais da Ínsula (interocepção)...',
-                '[OK]  Mapa visceral disponível.',
-                '[BOOT] Cingulado anterior: monitor de erro e dor emocional online.',
-                '[OK]  Painel de estados pronto.',
-                '[SYS]  Renderizador 3D carregado. Partículas sinápticas em standby.',
-                '[SYS]  Modo SONIC pronto para acoplamento ao usuário.',
-                '',
-                '>>> Pressione ENTRAR NO CÉREBRO para iniciar a sessão interativa.'
-            ];
+        // Background stars
+        const starGeo = new THREE.BufferGeometry();
+        const starCount = 300;
+        const starPos = [];
+        for (let i = 0; i < starCount; i++) {
+            const r = 30;
+            const theta = Math.random() * Math.PI * 2;
+            const phi = Math.random() * Math.PI;
+            const x = r * Math.sin(phi) * Math.cos(theta);
+            const y = r * Math.sin(phi) * Math.sin(theta);
+            const z = r * Math.cos(phi);
+            starPos.push(x, y, z);
+        }
+        starGeo.setAttribute(
+            'position',
+            new THREE.Float32BufferAttribute(starPos, 3)
+        );
+        const stars = new THREE.Points(
+            starGeo,
+            new THREE.PointsMaterial({
+                color: 0x88ccff,
+                size: 0.05,
+                transparent: true,
+                opacity: 0.6
+            })
+        );
+        scene.add(stars);
 
+        // --- SIMULATION PRESETS ---
+        const simPresets = {
+            normal: {
+                color: new THREE.Color(0x00f3ff),
+                flow: 0.002,
+                chem: { c: 15, s: 80, d: 65 },
+                bloom: 2.0
+            },
+            anxiety: {
+                color: new THREE.Color(0xff2a2a),
+                flow: 0.006,
+                chem: { c: 85, s: 35, d: 70 },
+                bloom: 2.8
+            },
+            depression: {
+                color: new THREE.Color(0x64748b),
+                flow: 0.001,
+                chem: { c: 55, s: 25, d: 20 },
+                bloom: 1.3
+            }
+        };
+
+        function setActiveButton(btn) {
+            [btnHomeo, btnAnxiety, btnDepress].forEach((b) =>
+                b.classList.remove('active')
+            );
+            btn.classList.add('active');
+        }
+
+        window.setSimulation = (mode, btn) => {
+            state.mode = mode;
+            const preset = simPresets[mode];
+            if (!preset) return;
+
+            state.baseColor.copy(preset.color);
+            state.flowSpeed = preset.flow;
+            bloomPass.strength = preset.bloom;
+
+            setActiveButton(btn);
+            updateChem(preset.chem.c, preset.chem.s, preset.chem.d);
+            audioSys.setMode(mode);
+
+            // Muda badge do modal se estiver aberto
+            const badge = document.getElementById('modal-badge');
+            if (badge) {
+                badge.innerText = mode === 'normal'
+                    ? 'HOMEOSTASE'
+                    : mode === 'anxiety'
+                    ? 'MODO ANSIEDADE'
+                    : 'MODO DEPRESSÃO';
+
+                if (state.mode === 'normal') {
+                    badge.style.background = 'rgba(0, 243, 255, 0.2)';
+                    badge.style.color = '#00f3ff';
+                } else if (state.mode === 'anxiety') {
+                    badge.style.background = 'rgba(255, 42, 42, 0.2)';
+                    badge.style.color = '#ff2a2a';
+                } else {
+                    badge.style.background = 'rgba(100, 116, 139, 0.2)';
+                    badge.style.color = '#cbd5e1';
+                }
+            }
+        };
+
+        window.togglePerformance = (btn) => {
+            state.performanceMode = !state.performanceMode;
+            btn.classList.toggle('active', state.performanceMode);
+        };
+
+        // Sessões Guiadas
+        const sessionSelect = document.getElementById('session-select');
+        const sessionStatus = document.getElementById('session-status');
+        const breathingPacer = document.getElementById('breathing-pacer');
+        const breathInstruction = document.getElementById('breath-instruction');
+        let sessionInterval = null;
+
+        const sessions = {
+            antiAnxiety: {
+                label: 'Anti-crise de ansiedade',
+                script: [
+                    'Inspire profundamente pelo nariz por 4 segundos...',
+                    'Segure o ar por 4 segundos...',
+                    'Expire lentamente pela boca por 6 segundos...',
+                    'Observe o peso do corpo apoiando você.',
+                    'Traga a atenção de volta para o ambiente presente.'
+                ]
+            },
+            depressionLift: {
+                label: 'Saída da inércia depressiva',
+                script: [
+                    'Escolha um micro passo: mover um músculo, levantar um pouco o tronco...',
+                    'Inspire contando até 3, solte o ar em 5...',
+                    'Identifique uma única ação possível hoje (bem pequena).',
+                    'Visualize você concluindo essa ação.',
+                    'Reforce mentalmente: "Eu não preciso fazer tudo. Só o próximo passo."'
+                ]
+            }
+        };
+
+        function showBreathingPacer(show) {
+            if (show) {
+                breathingPacer.style.display = 'flex';
+                requestAnimationFrame(() => {
+                    breathingPacer.style.opacity = '1';
+                });
+            } else {
+                breathingPacer.style.opacity = '0';
+                setTimeout(() => {
+                    breathingPacer.style.display = 'none';
+                }, 1000);
+            }
+        }
+
+        function runSessionScript(key) {
+            const data = sessions[key];
+            if (!data) return;
             let idx = 0;
-            const interval = setInterval(() => {
-                if (idx >= lines.length) {
-                    clearInterval(interval);
-                    btn.style.display = 'inline-flex';
+            breathInstruction.textContent = data.script[0];
+            showBreathingPacer(true);
+
+            if (sessionInterval) clearInterval(sessionInterval);
+            sessionInterval = setInterval(() => {
+                idx++;
+                if (idx >= data.script.length) {
+                    clearInterval(sessionInterval);
+                    showBreathingPacer(false);
+                    sessionStatus.textContent = 'Sessão finalizada.';
                     return;
                 }
+                breathInstruction.textContent = data.script[idx];
+            }, 15000); // ~15s por etapa
+        }
+
+        window.startSelectedSession = () => {
+            const val = sessionSelect.value;
+            sessionStatus.textContent = 'Sessão em andamento...';
+            if (val === 'antiAnxiety') {
+                window.setSimulation('anxiety', btnAnxiety);
+                runSessionScript('antiAnxiety');
+            } else if (val === 'depressionLift') {
+                window.setSimulation('depression', btnDepress);
+                runSessionScript('depressionLift');
+            }
+        };
+
+        window.stopSession = () => {
+            if (sessionInterval) clearInterval(sessionInterval);
+            showBreathingPacer(false);
+            sessionStatus.textContent = 'Nenhuma sessão ativa';
+        };
+
+        // BOOT + START
+        const bootLog = document.getElementById('boot-log');
+        const bootBtn = document.getElementById('boot-btn');
+
+        function logBoot(message, delay) {
+            setTimeout(() => {
                 const line = document.createElement('div');
-                line.textContent = lines[idx];
-                logEl.appendChild(line);
-                logEl.scrollTop = logEl.scrollHeight;
-                idx++;
-            }, 230);
+                line.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+                bootLog.appendChild(line);
+                bootLog.scrollTop = bootLog.scrollHeight;
+            }, delay);
+        }
+
+        function runBootSequence() {
+            const steps = [
+                'Carregando malha conectômica...',
+                'Indexando circuitos emocionais...',
+                'Sincronizando monitor neuroquímico...',
+                'Otimizando pipeline de renderização...',
+                'Inicializando camadas de simulação...'
+            ];
+            steps.forEach((s, i) => logBoot(s, i * 700));
+            setTimeout(() => {
+                bootBtn.style.display = 'inline-flex';
+                logBoot('Sistema pronto. Aguardando confirmação do usuário.', 600);
+            }, steps.length * 700 + 400);
         }
 
         window.showStartScreen = () => {
@@ -1355,18 +1585,11 @@
 
         const chemChartCanvas = document.getElementById('chem-chart');
         const chemChartCtx = chemChartCanvas.getContext('2d');
-        const chemHistory = { c: [], s: [], d: [] };
-        const maxHistoryPoints = 60;
-
-        function recordChemHistory() {
-            chemHistory.c.push(chemState.c);
-            chemHistory.s.push(chemState.s);
-            chemHistory.d.push(chemState.d);
-            ['c', 's', 'd'].forEach(k => {
-                if (chemHistory[k].length > maxHistoryPoints) chemHistory[k].shift();
-            });
-            drawChemChart();
-        }
+        const chemHistory = {
+            c: new Array(60).fill(15),
+            s: new Array(60).fill(80),
+            d: new Array(60).fill(65)
+        };
 
         function drawChemChart() {
             const ctx = chemChartCtx;
@@ -1374,352 +1597,222 @@
             const h = chemChartCanvas.height;
             ctx.clearRect(0, 0, w, h);
 
-            // fundo
-            ctx.fillStyle = 'rgba(15,23,42,0.95)';
-            ctx.fillRect(0, 0, w, h);
-
-            // grid
-            ctx.strokeStyle = 'rgba(148,163,184,0.25)';
-            ctx.lineWidth = 1;
-            ctx.beginPath();
-            for (let i = 0; i <= 4; i++) {
-                const y = (h - 10) * (i / 4) + 5;
-                ctx.moveTo(0, y);
-                ctx.lineTo(w, y);
-            }
-            ctx.stroke();
-
-            const drawLine = (data, color) => {
-                if (data.length < 2) return;
-                ctx.strokeStyle = color;
-                ctx.lineWidth = 1.5;
+            function drawLine(data, color) {
                 ctx.beginPath();
-                data.forEach((val, idx) => {
-                    const x = (w - 10) * (idx / (maxHistoryPoints - 1)) + 5;
-                    const y = h - 5 - (h - 10) * (val / 100);
-                    if (idx === 0) ctx.moveTo(x, y);
+                ctx.strokeStyle = color;
+                ctx.lineWidth = 1;
+                data.forEach((val, i) => {
+                    const x = (i / (data.length - 1)) * w;
+                    const y = h - (val / 100) * h;
+                    if (i === 0) ctx.moveTo(x, y);
                     else ctx.lineTo(x, y);
                 });
                 ctx.stroke();
-            };
+            }
 
-            drawLine(chemHistory.c, '#ff2a2a');
-            drawLine(chemHistory.s, '#00ff9d');
-            drawLine(chemHistory.d, '#ffcc00');
+            drawLine(chemHistory.c, '#ff2a2a'); // cortisol
+            drawLine(chemHistory.s, '#00ff9d'); // serotonin
+            drawLine(chemHistory.d, '#ffcc00'); // dopamine
         }
 
-        setInterval(recordChemHistory, 1000);
-
-        // --- SESSÕES GUIADAS ---
-        const sessionConfigs = {
-            antiAnxiety: {
-                label: 'Anti-crise de ansiedade',
-                duration: 180,
-                relaxStart: 30,
-                modeStart: 'anxiety',
-                targetChem: { c: 20, s: 80, d: 60 }
-            },
-            depressionLift: {
-                label: 'Saída da inércia depressiva',
-                duration: 180,
-                relaxStart: 20,
-                modeStart: 'depression',
-                targetChem: { c: 30, s: 65, d: 55 }
-            }
-        };
-
-        let sessionState = {
-            active: false,
-            type: null,
-            elapsed: 0,
-            duration: 0,
-            timerId: null,
-            label: '',
-            startChem: null,
-            config: null
-        };
-
-        function formatTime(sec) {
-            const m = Math.floor(sec / 60);
-            const s = sec % 60;
-            return `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+        function pushChemHistory() {
+            ['c', 's', 'd'].forEach((k) => {
+                chemHistory[k].push(chemState[k]);
+                chemHistory[k].shift();
+            });
+            drawChemChart();
         }
-
-        function updateSessionStatus() {
-            const el = document.getElementById('session-status');
-            if (!el) return;
-            if (!sessionState.active) {
-                el.textContent = 'Nenhuma sessão ativa';
-                return;
-            }
-            const remaining = Math.max(0, sessionState.duration - sessionState.elapsed);
-            el.textContent = `${sessionState.label} – restante ${formatTime(remaining)}`;
-        }
-
-        function startSession(type) {
-            const config = sessionConfigs[type];
-            if (!config) return;
-
-            // Se já tiver sessão rodando, encerra silenciosamente
-            stopSession(true);
-
-            sessionState = {
-                active: true,
-                type,
-                elapsed: 0,
-                duration: config.duration,
-                timerId: null,
-                label: config.label,
-                startChem: null,
-                config
-            };
-
-            // Ajusta modo inicial
-            if (config.modeStart === 'anxiety') {
-                setSimulation('anxiety');
-            } else if (config.modeStart === 'depression') {
-                setSimulation('depression');
-            } else {
-                setSimulation('normal');
-            }
-
-            // captura química inicial após setSimulation
-            sessionState.startChem = { ...chemState };
-
-            updateSessionStatus();
-
-            sessionState.timerId = setInterval(() => {
-                if (!sessionState.active || !sessionState.config) return;
-
-                sessionState.elapsed++;
-
-                const cfg = sessionState.config;
-
-                if (sessionState.elapsed >= cfg.relaxStart) {
-                    const tRaw = (sessionState.elapsed - cfg.relaxStart) / (cfg.duration - cfg.relaxStart);
-                    const t = Math.max(0, Math.min(1, tRaw));
-
-                    const nc = Math.round(sessionState.startChem.c + (cfg.targetChem.c - sessionState.startChem.c) * t);
-                    const ns = Math.round(sessionState.startChem.s + (cfg.targetChem.s - sessionState.startChem.s) * t);
-                    const nd = Math.round(sessionState.startChem.d + (cfg.targetChem.d - sessionState.startChem.d) * t);
-                    updateChem(nc, ns, nd);
-                }
-
-                updateSessionStatus();
-
-                if (sessionState.elapsed >= cfg.duration) {
-                    // encerra levando para homeostase
-                    setSimulation('normal');
-                    stopSession(true);
-                    updateSessionStatus();
-                }
-            }, 1000);
-        }
-
-        window.startSelectedSession = () => {
-            const select = document.getElementById('session-select');
-            if (!select) return;
-            startSession(select.value);
-        };
-
-        window.stopSession = (silent) => {
-            if (sessionState.timerId) {
-                clearInterval(sessionState.timerId);
-            }
-            sessionState.timerId = null;
-            sessionState.active = false;
-            sessionState.type = null;
-            sessionState.config = null;
-            if (!silent) {
-                updateSessionStatus();
-            }
-        };
-
-        // --- FUNCTIONS ---
-
-        window.initExperience = () => {
-            const start = document.getElementById('start-screen');
-            start.style.opacity = 0;
-            setTimeout(() => start.style.display = 'none', 800);
-            audioSys.init();
-            audioSys.setMode('normal');
-        };
-
-        window.toggleAudio = () => {
-            const muted = audioSys.toggle();
-            const icon = document.getElementById('audio-icon');
-            icon.className = muted ? 'bi bi-volume-mute-fill' : 'bi bi-volume-up-fill';
-            icon.style.color = muted ? '#666' : 'var(--neon-cyan)';
-        };
-
-        function updateModal(modalId) {
-            const data = modalData[modalId];
-            const currentData = data[state.mode];
-            
-            document.getElementById('modal-main-title').innerText = data.title;
-            document.getElementById('content-behavior').innerHTML = currentData.behavior;
-            document.getElementById('content-mech').innerHTML = currentData.mech;
-            
-            const badge = document.getElementById('modal-badge');
-            badge.innerText = state.mode.toUpperCase();
-            
-            // Badge Colors
-            if(state.mode === 'normal') { badge.style.background = 'rgba(0, 243, 255, 0.2)'; badge.style.color = '#00f3ff'; }
-            else if(state.mode === 'anxiety') { badge.style.background = 'rgba(255, 42, 42, 0.2)'; badge.style.color = '#ff2a2a'; }
-            else { badge.style.background = 'rgba(100, 116, 139, 0.2)'; badge.style.color = '#cbd5e1'; }
-        }
-
-        // Interaction
-        const raycaster = new THREE.Raycaster();
-        const mouse = new THREE.Vector2();
-        window.addEventListener('pointerdown', (e) => {
-            if(e.target.closest('.sim-controls') || e.target.closest('.chem-monitor') || e.target.closest('.session-panel')) return;
-            
-            mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
-            mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
-            raycaster.setFromCamera(mouse, camera);
-            const intersects = raycaster.intersectObjects(brainGroup.children, true);
-            if(intersects.length > 0) {
-                let target = intersects[0].object;
-                while(target.parent && !target.userData.isHotspot) target = target.parent;
-                if(target.userData.isHotspot) {
-                    updateModal(target.userData.modalId);
-                    
-                    // Cinematic Focus
-                    state.cameraFocus = { 
-                        pos: target.userData.focusPos.clone(), 
-                        lookAt: target.position.clone() 
-                    };
-                    
-                    const myModal = new bootstrap.Modal(document.getElementById('generic-modal'));
-                    myModal.show();
-                    
-                    // Reset camera when modal closes
-                    document.getElementById('generic-modal').addEventListener('hidden.bs.modal', () => {
-                        state.cameraFocus = null;
-                    }, { once: true });
-                }
-            }
-        });
+        setInterval(pushChemHistory, 1000);
 
         function updateChem(c, s, d) {
             chemState.c = c;
             chemState.s = s;
             chemState.d = d;
-            document.getElementById('bar-cortisol').style.width = c + '%'; document.getElementById('val-cortisol').innerText = c + '%';
-            document.getElementById('bar-serotonin').style.width = s + '%'; document.getElementById('val-serotonin').innerText = s + '%';
-            document.getElementById('bar-dopamine').style.width = d + '%'; document.getElementById('val-dopamine').innerText = d + '%';
+            document.getElementById('bar-cortisol').style.width = c + '%';
+            document.getElementById('val-cortisol').innerText = c + '%';
+            document.getElementById('bar-serotonin').style.width = s + '%';
+            document.getElementById('val-serotonin').innerText = s + '%';
+            document.getElementById('bar-dopamine').style.width = d + '%';
+            document.getElementById('val-dopamine').innerText = d + '%';
         }
 
-        // Simulation Control
-        window.setSimulation = (mode, btn) => {
-            // limpa active dos modos principais
-            document.querySelectorAll('.sim-btn').forEach(b => {
-                if (!b.classList.contains('perf-toggle')) {
-                    b.classList.remove('active');
-                }
-            });
+        // Modal dynamic
+        function updateModal(modalId) {
+            const data = modalData[modalId];
+            if (!data) return;
+            const currentMode = state.mode || 'normal';
+            const payload = data[currentMode] || data['normal'];
 
-            if (!btn) {
-                if (mode === 'normal') btn = btnHomeo;
-                else if (mode === 'anxiety') btn = btnAnxiety;
-                else if (mode === 'depression') btn = btnDepress;
-            }
+            document.getElementById('modal-main-title').innerText = data.title;
 
-            if (btn) {
-                btn.classList.add('active');
-            }
-
-            state.mode = mode;
-            audioSys.setMode(mode);
-
-            const pacer = document.getElementById('breathing-pacer');
-
-            if(mode === 'normal') {
-                updateChem(15, 80, 65);
-                state.baseColor.setHex(0x00f3ff);
-                state.flowSpeed = 0.002;
-                pacer.style.display = 'none'; pacer.style.opacity = 0;
-            } else if (mode === 'anxiety') {
-                updateChem(95, 40, 85);
-                state.baseColor.setHex(0xff2a2a);
-                state.flowSpeed = 0.008;
-                // Activate Breathing Pacer
-                pacer.style.display = 'flex';
-                setTimeout(() => pacer.style.opacity = 1, 100);
-            } else if (mode === 'depression') {
-                updateChem(40, 20, 15);
-                state.baseColor.setHex(0x64748b);
-                state.flowSpeed = 0.0005;
-                pacer.style.display = 'none'; pacer.style.opacity = 0;
-            }
-        };
-
-        window.togglePerformance = (btn) => {
-            state.performanceMode = !state.performanceMode;
-            if (btn) {
-                btn.classList.toggle('active', state.performanceMode);
-            }
-
-            if (state.performanceMode) {
-                // Reduz um pouco o custo gráfico
-                renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
-                bloomPass.strength = 1.2;
-                particles.material.size = 0.06;
-                particles.material.needsUpdate = true;
+            const badge = document.getElementById('modal-badge');
+            if (currentMode === 'normal') {
+                badge.innerText = 'HOMEOSTASE';
+                badge.style.background = 'rgba(0, 243, 255, 0.2)';
+                badge.style.color = '#00f3ff';
+            } else if (currentMode === 'anxiety') {
+                badge.innerText = 'MODO ANSIEDADE';
+                badge.style.background = 'rgba(255, 42, 42, 0.2)';
+                badge.style.color = '#ff2a2a';
             } else {
-                // Volta para o padrão original
-                renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-                bloomPass.strength = 2.0;
-                particles.material.size = 0.08;
-                particles.material.needsUpdate = true;
+                badge.innerText = 'MODO DEPRESSÃO';
+                badge.style.background = 'rgba(100, 116, 139, 0.2)';
+                badge.style.color = '#cbd5e1';
             }
-        };
 
-        // Loop
-        function animate() {
-            requestAnimationFrame(animate);
+            document.getElementById('content-behavior').innerHTML = payload.behavior;
+            document.getElementById('content-mech').innerHTML = payload.mech;
+        }
 
-            // Se a aba não estiver ativa e não estiver em modo performance, simplifica
-            if (!isTabActive && !state.performanceMode) {
-                composer.render();
+        // Interaction (FIX do clique intermitente)
+        const raycaster = new THREE.Raycaster();
+        const mouse = new THREE.Vector2();
+        window.addEventListener('pointerdown', (e) => {
+            if (
+                e.target.closest('.sim-controls') ||
+                e.target.closest('.chem-monitor') ||
+                e.target.closest('.session-panel') ||
+                e.target.closest('#boot-screen') ||
+                e.target.closest('#start-screen') ||
+                e.target.closest('.modal')
+            ) {
                 return;
             }
-            
-            // Camera Logic
-            if(state.cameraFocus) {
-                // Cinematic Zoom
-                camera.position.lerp(state.cameraFocus.pos, 0.05);
-                controls.target.lerp(state.cameraFocus.lookAt, 0.05);
-            } else {
-                // Idle Float
-                controls.target.lerp(new THREE.Vector3(0,0,0), 0.05);
-                brainGroup.rotation.y += 0.001;
+
+            mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+            raycaster.setFromCamera(mouse, camera);
+
+            const intersects = raycaster.intersectObjects(brainGroup.children, true);
+
+            if (intersects.length > 0) {
+                let hotspot = null;
+
+                for (const hit of intersects) {
+                    let target = hit.object;
+                    while (
+                        target &&
+                        target !== brainGroup &&
+                        !(target.userData && target.userData.isHotspot)
+                    ) {
+                        target = target.parent;
+                    }
+                    if (target && target.userData && target.userData.isHotspot) {
+                        hotspot = target;
+                        break;
+                    }
+                }
+
+           
+
+                if (hotspot) {
+                    updateModal(hotspot.userData.modalId);
+
+                    // Cinematic Focus
+                    state.cameraFocus = {
+                        pos: hotspot.userData.focusPos.clone(),
+                        lookAt: hotspot.position.clone()
+                    };
+
+                    const myModal = new bootstrap.Modal(
+                        document.getElementById('generic-modal')
+                    );
+                    myModal.show();
+
+                    // Reset camera when modal closes
+                    document
+                        .getElementById('generic-modal')
+                        .addEventListener(
+                            'hidden.bs.modal',
+                            () => {
+                                state.cameraFocus = null;
+                            },
+                            { once: true }
+                        );
+                }
             }
+        });
+
+        // Audio Toggle global
+        window.toggleAudio = () => {
+            const muted = audioSys.toggle();
+            const icon = document.getElementById('audio-icon');
+            icon.className = muted
+                ? 'bi bi-volume-mute-fill'
+                : 'bi bi-volume-up-fill';
+        };
+
+        window.initExperience = () => {
+            // Garante contexto de áudio iniciado
+            if (!audioSys.ctx) audioSys.init();
+            audioSys.setMode('normal');
+
+            const start = document.getElementById('start-screen');
+            start.style.opacity = '0';
+            setTimeout(() => {
+                start.style.display = 'none';
+            }, 800);
+        };
+
+        // MAIN LOOP
+        let lastTime = performance.now();
+        function animate(now = performance.now()) {
+            requestAnimationFrame(animate);
+            if (!isTabActive) return;
+
+            const delta = now - lastTime;
+            lastTime = now;
+            const t = now * 0.001;
+
+            // Performance Mode: reduz carga quando ativo
+            const speedFactor = state.performanceMode ? 0.5 : 1;
+
+            // Rotate brain
+            brainGroup.rotation.y += 0.0006 * speedFactor;
+
+            // Stars slow drift
+            stars.rotation.y += 0.0001 * speedFactor;
+
+            // Update particles along curves
+            const positions = particleGeo.attributes.position.array;
+            for (let i = 0; i < particleCount; i++) {
+                particleProgress[i] += state.flowSpeed * speedFactor;
+                if (particleProgress[i] > 1) particleProgress[i] = 0;
+                const curve = tractography.curveObjects[particleCurveIndex[i]];
+                const p = curve.getPoint(particleProgress[i]);
+                positions[i * 3 + 0] = p.x;
+                positions[i * 3 + 1] = p.y;
+                positions[i * 3 + 2] = p.z;
+            }
+            particleGeo.attributes.position.needsUpdate = true;
+
+            // Camera focus
+            if (state.cameraFocus) {
+                const targetPos = state.cameraFocus.pos;
+                const lookAt = state.cameraFocus.lookAt;
+                camera.position.lerp(targetPos, 0.05);
+                controls.target.lerp(lookAt, 0.05);
+            } else {
+                controls.target.lerp(new THREE.Vector3(0, 0, 0), 0.02);
+                camera.position.lerp(state.defaultCamPos, 0.02);
+            }
+
             controls.update();
 
-            // Particles
-            const positions = particles.geometry.attributes.position.array;
-            for(let i=0; i<particleCount; i++) {
-                particleProgress[i] += state.flowSpeed;
-                if(particleProgress[i] > 1) particleProgress[i] = 0;
-                const curve = tractography.curveObjects[particleCurveIndex[i]];
-                const point = curve.getPoint(particleProgress[i]);
-                positions[i*3] = point.x; positions[i*3+1] = point.y; positions[i*3+2] = point.z;
-            }
-            particles.geometry.attributes.position.needsUpdate = true;
-            particles.material.color.lerp(state.baseColor, 0.05);
-
-            // Labels
-            labels.forEach(l => {
-                const pos = new THREE.Vector3(); l.obj.getWorldPosition(pos); pos.project(camera);
-                if(pos.z > 1) {
+            // Update labels (projetar para 2D)
+            labels.forEach((l) => {
+                const pos = l.obj.position.clone();
+                l.obj.getWorldPosition(pos);
+                pos.project(camera);
+                if (pos.z > 1) {
                     l.el.style.opacity = 0;
                 } else {
                     l.el.style.opacity = 0.8;
-                    const x = (pos.x * .5 + .5) * container.clientWidth;
-                    const y = (pos.y * -.5 + .5) * container.clientHeight;
-                    l.el.style.transform = `translate(-50%, -100%) translate(${x}px, ${y-20}px)`;
+                    const x = (pos.x * 0.5 + 0.5) * container.clientWidth;
+                    const y = (pos.y * -0.5 + 0.5) * container.clientHeight;
+                    l.el.style.transform = `translate(-50%, -100%) translate(${x}px, ${
+                        y - 20
+                    }px)`;
                 }
             });
 
